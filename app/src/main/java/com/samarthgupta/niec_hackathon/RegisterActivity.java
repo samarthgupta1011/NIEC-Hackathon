@@ -99,8 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(), Toast.LENGTH_SHORT).show();
                                 } else {
 
-                                    UserInformation userInfo = new UserInformation();
-                                    ref.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userInfo);
+                                    //String email, String password ,String fname,String lname, String mno, String city,String icode
+                                    UserInformation userInfo = new UserInformation(email,fname,lname,mno,city,icode);
+                                    ref.child("User Data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userInfo);
                                     startActivity(new Intent(RegisterActivity.this, SignInActivity.class));
                                     finish();
                                 }

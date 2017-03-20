@@ -7,7 +7,6 @@ package com.samarthgupta.niec_hackathon.POJO;
 public class UserInformation {
 
     private   String email;
-    private String password;
     private String mno;
     private String city;
     private String fname;
@@ -18,10 +17,9 @@ public class UserInformation {
         //Empty constructor
     }
 
-    public UserInformation(String email, String password , String fname, String lname, String mno, String city, String icode){
+    public UserInformation(String email , String fname, String lname, String mno, String city, String icode){
 
         this.email = email;
-        this.password = password;
         this.city = city;
         this.fname = fname;
         this.lname = lname;
@@ -55,7 +53,4 @@ public class UserInformation {
         return mno;
     }
 
-    public String getPassword() {
-        return password;
-    }
 }
