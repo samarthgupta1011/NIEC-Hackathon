@@ -1,11 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:gravity="center_horizontal"
-android:layout_margin="10dp"
-android:orientation="vertical"
-tools:context="com.samarthgupta.niec_hackathon.SignInActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    tools:context="com.samarthgupta.niec_hackathon.SignInActivity">
 
 <!-- Login progress -->
 <ProgressBar
@@ -86,7 +87,24 @@ tools:context="com.samarthgupta.niec_hackathon.SignInActivity">
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/sign_up_here"
         android:textColor="@color/colorPrimaryDark"
-        android:id="@+id/signUp"/>
+        android:id="@+id/tv_signUp"/>
 
 </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/bt_google_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            tools:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
 </LinearLayout>

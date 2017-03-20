@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.samarthgupta.niec_hackathon">
+    package="com.samarthgupta.niec_hackathon">
 
     <application
         android:allowBackup="true"
