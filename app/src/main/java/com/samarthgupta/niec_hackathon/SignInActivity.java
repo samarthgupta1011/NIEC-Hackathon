@@ -52,8 +52,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             //auth.signOut();
 
 
-            //////////////////////////////////
-            // startActivity(new Intent(SignInActivity.this, Home.class));
+            startActivity(new Intent(SignInActivity.this, HomeActivity.class));
             finish();
         }
 
@@ -108,10 +107,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                     }
                                 } else {
                                     //TO USE - LOGIN COMPLETE
-                                    //////////////////////////////////
-                                    //  Intent intent = new Intent(SignInActivity.this, Home.class);
-                                    //   startActivity(intent);
-                                    finish();
+                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                                     startActivity(intent);
+                                     finish();
                                 }
                             }
                         });
