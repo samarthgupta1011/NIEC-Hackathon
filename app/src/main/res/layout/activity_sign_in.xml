@@ -86,7 +86,7 @@ tools:context="com.samarthgupta.niec_hackathon.SignInActivity">
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/sign_up_here"
         android:textColor="@color/colorPrimaryDark"
-        android:id="@+id/signUp"/>
+        android:id="@+id/tv_signUp"/>
 
 </RelativeLayout>
 </LinearLayout>
