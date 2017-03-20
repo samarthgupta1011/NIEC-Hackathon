@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NIEC_Hackathon</string>
+    <string name="sign_up_here"><u>Sign Up Here</u></string>
 </resources>
