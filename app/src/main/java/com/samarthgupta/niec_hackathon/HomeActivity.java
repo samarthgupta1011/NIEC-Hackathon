@@ -3,6 +3,8 @@ package com.samarthgupta.niec_hackathon;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +19,9 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.samarthgupta.niec_hackathon.Fragments.BuyFragment;
+import com.samarthgupta.niec_hackathon.Fragments.CameraFragment;
+import com.samarthgupta.niec_hackathon.Fragments.DonateFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -38,6 +43,8 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        showFragment(BuyFragment.class);
     }
 
     @Override
@@ -84,9 +91,11 @@ public class HomeActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Class fragment = null;
 
         if (id == R.id.nav_camera)
         {
+
             // Handle the camera action
         } else if (id == R.id.nav_gallery)
         {
@@ -105,8 +114,35 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
+        else if(id== R.id.navigation_buy) {
+            fragment = BuyFragment.class;
+            showFragment(fragment);
+        }
+
+        else if (id ==R.id.navigation_sell){
+            fragment = CameraFragment.class;
+            showFragment(fragment);
+        }
+        else if (id == R.id.navigation_donate){
+            fragment = DonateFragment.class;
+            showFragment(fragment);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showFragment(Class frag) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment)frag.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flcontent, fragment).commit();
     }
 }
