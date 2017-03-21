@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bt_signin"
         android:layout_marginTop="30dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/AppTheme"
         android:text="@string/sign_up_here"
         android:textColor="@color/colorPrimaryDark"
         android:id="@+id/tv_signUp"/>

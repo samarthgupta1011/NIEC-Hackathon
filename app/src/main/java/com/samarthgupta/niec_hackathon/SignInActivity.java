@@ -2,8 +2,10 @@ package com.samarthgupta.niec_hackathon;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,25 +35,38 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
     private EditText inputEmail, inputPassword;
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     private ProgressBar progressBar;
     private TextView tv1;
     private Button btnLogin;
-    private ProgressDialog mProgressDialog;
-    private static final String TAG = "SignInActivity";
 
-    private GoogleApiClient mGoogleApiClient;
+
+
+
+    private static final String TAG = "LoginActivity";
+    private static int RC_SIGN_IN = 0;
+    private GoogleApiClient mGoogleApiCLient;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
+/*
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -64,9 +79,30 @@ public class SignInActivity extends AppCompatActivity implements
 
         // set the view now
         setContentView(R.layout.activity_sign_in);
-
+*/
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+
+
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged: AUTH" + user.getDisplayName());
+                    Toast.makeText(getApplicationContext(), "jchjsdh", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignInActivity.this, HomeActivity.class));
+                    finish();
+
+                } else {
+                    Log.d(TAG, "onAuthStateChanged: AuthCancel" + "User Logged Out");
+                }
+            }
+        };
+
 
         inputEmail = (EditText) findViewById(R.id.et_email_signin);
         inputPassword = (EditText) findViewById(R.id.et_password_signin);
@@ -74,15 +110,8 @@ public class SignInActivity extends AppCompatActivity implements
         btnLogin = (Button) findViewById(R.id.bt_signin);
         tv1 = (TextView) findViewById(R.id.tv_signUp);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +131,7 @@ public class SignInActivity extends AppCompatActivity implements
                 progressBar.setVisibility(View.VISIBLE);
 
                 //authenticate user
-                auth.signInWithEmailAndPassword(email, password)
+                mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -120,7 +149,8 @@ public class SignInActivity extends AppCompatActivity implements
                                     }
                                 } else {
                                     //TO USE - LOGIN COMPLETE
-                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                                    Toast.makeText(getApplicationContext(), "jchjsdh", Toast.LENGTH_SHORT).show();
+                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                      startActivity(intent);
                                      finish();
                                 }
@@ -138,106 +168,117 @@ public class SignInActivity extends AppCompatActivity implements
             }
         });
 
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiCLient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+        findViewById(R.id.bt_google_signin).setOnClickListener(this);
+       // findViewById(R.id.sign_out_btn).setOnClickListener(this);
+
+
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+
+    private void signin(){
+        Intent signInIntent= Auth.GoogleSignInApi.getSignInIntent(mGoogleApiCLient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==RC_SIGN_IN){
+            GoogleSignInResult result= Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+            if(result.isSuccess()){
+                GoogleSignInAccount account= result.getSignInAccount();
+                FirebaseAuthWithGoogle(account);
+
+
+//                userToDB();
+                Toast.makeText(getApplicationContext(), "jchjsdh", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SignInActivity.this, HomeActivity.class));
+                finish();
+
+              //  Intent i = new Intent(this, HomeActivity.class);
+              //  startActivityForResult(i, 1);
+//                userToDB();
+
+            }
+            else{
+                Log.d(TAG, "onActivityResult: LOGIN FAILED!");
+            }
+        }
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+
+    /*public static String encodeEmail(String userEmail) {
+        return userEmail.replace(".", ",");
+    }*/
+
+    private void FirebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential= GoogleAuthProvider.getCredential(acct.getIdToken(),null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "onComplete: AUTH"+ " Signin with Creds Complete"+ task.isSuccessful());
+
+
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+                });
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        Log.d(TAG, "onConnectionFailed: Connection Failed!");
+
+
+
     }
 
     @Override
     public void onClick(View view) {
-        signIn();
-    }
+        switch (view.getId()){
+            case R.id.bt_google_signin: signin();
+                break;
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            updateUI(true);
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(false);
-        }
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
-
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("Loading");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
-    }
-
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            findViewById(R.id.bt_google_signin).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.bt_google_signin).setVisibility(View.VISIBLE);
         }
     }
 }

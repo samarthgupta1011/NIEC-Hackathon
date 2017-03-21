@@ -1,5 +1,6 @@
 package com.samarthgupta.niec_hackathon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -61,6 +62,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
