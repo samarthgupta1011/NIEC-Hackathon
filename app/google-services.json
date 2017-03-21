@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "534513316339",
+    "firebase_url": "https://niec-hackathon.firebaseio.com",
+    "project_id": "niec-hackathon",
+    "storage_bucket": "niec-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534513316339:android:5dd54372e237ae83",
+        "android_client_info": {
+          "package_name": "com.samarthgupta.niec_hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "534513316339-8reiqtkv65sg8o48am1341eltbolf1md.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.samarthgupta.niec_hackathon",
+            "certificate_hash": "44d1ee4d98d1c8bdbb5e64cbb2707d4354a65a6c"
+          }
+        },
+        {
+          "client_id": "534513316339-kvbiogvamsgrs9u8umm787gnostqod2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG4KkMeTK5ZMUXht2SP7NLH5RWEz6LXPY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "534513316339-kvbiogvamsgrs9u8umm787gnostqod2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
