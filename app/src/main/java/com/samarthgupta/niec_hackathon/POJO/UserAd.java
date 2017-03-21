@@ -10,10 +10,12 @@ public class UserAd {
     public String condition;
     public String warranty;
     public int years;
+    float costsp;
 
     public UserAd() {
 
     }
+
 
     public UserAd(String descrip, String photo, String condition, String warranty, int years) {
         this.descrip = descrip;
@@ -21,6 +23,7 @@ public class UserAd {
         this.condition = condition;
         this.warranty = warranty;
         this.years = years;
+
     }
 
     public String getDescrip() {
