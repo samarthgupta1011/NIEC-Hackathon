@@ -1,5 +1,6 @@
 package com.samarthgupta.niec_hackathon;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ public class CostEval extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(CostEval.this,"lol"+i , Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CostEval.this , HomeActivity.class);
+                startActivity(intent);
             }
 
             @Override
